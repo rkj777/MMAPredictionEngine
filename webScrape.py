@@ -4,7 +4,7 @@ import json
 from collections import OrderedDict
 
 def main():
-    scrapeFighterInfoPage()
+    scrapeFighterInfoPage({})
     # print(elems[0].text)
 
     # saveWebPage("http://www.fightmetric.com/fighter-details/d0f3959b4a9747e6", "test2.txt")
@@ -18,16 +18,33 @@ def saveWebPage(url, fileName):
 
     file.close()
 
-def scrapeFighterInfoPage():
-   response = open("test2.txt")
-   soupRes = bs4.BeautifulSoup(response)
-   elems = soupRes.select('.b-list__info-box li')
-   for elements in elems:
-       print(elements.findAll(text=True))
-       #print(elements.findAll(text=True)[2].strip())
+def scrapeFighterInfoPage(individualFighterInformationDict):
+    response = open("test2.txt")
+    soupRes = bs4.BeautifulSoup(response, 'lxml')
+    figherStatsHTML = soupRes.select('.b-list__info-box li')
 
-   #print(elems)
+    fighterCareerStats = []
 
+    for elements in figherStatsHTML:
+        statArray = elements.findAll(text=True)
+        fighterCareerStats.append(statArray[2].strip())
+
+
+    individualFighterInformationDict['Height'] = fighterCareerStats[0]
+    individualFighterInformationDict['Weight'] = fighterCareerStats[1]
+    individualFighterInformationDict['Reach'] = fighterCareerStats[2]
+    individualFighterInformationDict['Stance'] = fighterCareerStats[3]
+    individualFighterInformationDict['Birthday'] = fighterCareerStats[4]
+    individualFighterInformationDict['SignificantStrikesLandedPerMinute'] = fighterCareerStats[5]
+    individualFighterInformationDict['SignificantStrikingAccuracy'] = fighterCareerStats[6]
+    individualFighterInformationDict['SignificantStrikesAbsorbedPerMinute'] = fighterCareerStats[7]
+    individualFighterInformationDict['SignificantStrikeDefence'] = fighterCareerStats[8]
+    individualFighterInformationDict['AverageTakedownsLandedPer15Minutes'] = fighterCareerStats[10]
+    individualFighterInformationDict['TakedownAccuracy'] = fighterCareerStats[11]
+    individualFighterInformationDict['TakedownDefense'] = fighterCareerStats[12]
+    individualFighterInformationDict['AverageSubmissionsAttemptedPer15Minutes'] = fighterCareerStats[13]
+
+    
 
 
 
