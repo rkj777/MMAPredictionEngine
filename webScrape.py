@@ -44,10 +44,37 @@ def scrapeFighterInfoPage(individualFighterInformationDict):
     individualFighterInformationDict['TakedownDefense'] = fighterCareerStats[12]
     individualFighterInformationDict['AverageSubmissionsAttemptedPer15Minutes'] = fighterCareerStats[13]
 
+    # Scraping Past Fight Information
+    fightHistroyTable = soupRes.select('tr')
+    scrapedPastFightData = []
     
+    for pastFight in fightHistroyTable[2:]:
+        pastFightInfo = pastFight.select('td')
+        #print(pastFightInfo)
+        pastFightInfoArray = []
+        pastFightInfoDictionary = {}
+        for inforField in pastFightInfo:
+            pastFightInfoArray.append(inforField.findAll(text=True))
 
+        pastFightInfoDictionary['Result'] = pastFightInfoArray[0][2].strip()
+        pastFightInfoDictionary['Opponent'] = pastFightInfoArray[1][6].strip()
+        pastFightInfoDictionary['Result'] = pastFightInfoArray[7][1].strip()
+        pastFightInfoDictionary["EndRound"] = pastFightInfoArray[8][1].strip()
+        pastFightInfoDictionary["EndTime"] = pastFightInfoArray[9][1].strip()
+        pastFightInfoDictionary["ResultMethod"] = pastFightInfoArray[7][3].strip()
+        # Fields that may not be important features
 
+        # Fighter name redundant. Uncomment to add fighter name to each fight history
+        # pastFightInfoDictionary['FighterName'] = pastFightInfoArray[1][2].strip()
 
+        # Fight card name
+        # pastFightInfoDictionary['FightCardName'] = pastFightInfoArray[6][2].strip()
+
+        # Fight date
+        # pastFightInfoDictionary['FightDate'] = pastFightInfoArray[6][6].strip()
+
+        scrapedPastFightData.append(pastFightInfoDictionary)
+    print(scrapedPastFightData)
 
 def getAllFighters():
     response = open("test.txt")
