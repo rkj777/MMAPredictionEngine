@@ -4,10 +4,10 @@ import json
 from collections import OrderedDict
 
 def main():
-    scrapeFighterInfoPage({})
+    scrapeFightPage("", {})
     # print(elems[0].text)
 
-    # saveWebPage("http://www.fightmetric.com/fighter-details/d0f3959b4a9747e6", "test2.txt")
+    #saveWebPage("http://www.fightmetric.com/fight-details/84c5035830ebb421", "test4.txt")
     
 def saveWebPage(url, fileName):
     res = requests.get(url)
@@ -18,7 +18,9 @@ def saveWebPage(url, fileName):
 
     file.close()
 
+
 def scrapeFighterInfoPage(individualFighterInformationDict):
+
     response = open("test2.txt")
     soupRes = bs4.BeautifulSoup(response, 'lxml')
     figherStatsHTML = soupRes.select('.b-list__info-box li')
@@ -48,8 +50,11 @@ def scrapeFighterInfoPage(individualFighterInformationDict):
     fightHistroyTable = soupRes.select('tr')
     scrapedPastFightData = []
     
-    for pastFight in fightHistroyTable[2:]:
+    for pastFight in fightHistroyTable[2:3]:
         pastFightInfo = pastFight.select('td')
+
+        fightInfoLink = pastFight.select('a')[0].get('href')
+
         #print(pastFightInfo)
         pastFightInfoArray = []
         pastFightInfoDictionary = {}
@@ -62,6 +67,7 @@ def scrapeFighterInfoPage(individualFighterInformationDict):
         pastFightInfoDictionary["EndRound"] = pastFightInfoArray[8][1].strip()
         pastFightInfoDictionary["EndTime"] = pastFightInfoArray[9][1].strip()
         pastFightInfoDictionary["ResultMethod"] = pastFightInfoArray[7][3].strip()
+
         # Fields that may not be important features
 
         # Fighter name redundant. Uncomment to add fighter name to each fight history
@@ -74,7 +80,41 @@ def scrapeFighterInfoPage(individualFighterInformationDict):
         # pastFightInfoDictionary['FightDate'] = pastFightInfoArray[6][6].strip()
 
         scrapedPastFightData.append(pastFightInfoDictionary)
+
+        # Moving into individual fight web pages
+
     print(scrapedPastFightData)
+
+def scrapeFightPage(url, pastFightInfoDictionary):
+    response = requests.get('http://www.fightmetric.com/fight-details/84c5035830ebb421')
+
+    soupRes = bs4.BeautifulSoup(response.text,'lxml')
+
+    elems = soupRes.select(".b-fight-details__table-body")
+    totalFightStats = elems[0].select("td")
+
+    pastFightInfoDictionary['fighterKnockDowns'] = totalFightStats[1].findAll(text=True)[1].strip()
+    pastFightInfoDictionary['OpponentKnockDowns'] = totalFightStats[1].findAll(text=True)[3].strip()
+    pastFightInfoDictionary['FighterSignificantStrikes'] = totalFightStats[2].findAll(text=True)[1].strip()
+    pastFightInfoDictionary['OpponentSignificantStrikes'] = totalFightStats[2].findAll(text=True)[3].strip()
+    pastFightInfoDictionary['FighterSignificantStrikesPercent'] = totalFightStats[3].findAll(text=True)[1].strip()
+    pastFightInfoDictionary['OpponentSignificantStrikesPercent'] = totalFightStats[3].findAll(text=True)[3].strip()
+    pastFightInfoDictionary['FighterTotalStrikes'] = totalFightStats[4].findAll(text=True)[1].strip()
+    pastFightInfoDictionary['OpponentTotalStrikes'] = totalFightStats[4].findAll(text=True)[3].strip()
+    pastFightInfoDictionary['FighterTakedowns'] = totalFightStats[5].findAll(text=True)[1].strip()
+    pastFightInfoDictionary['OpponentTakedowns'] = totalFightStats[5].findAll(text=True)[3].strip()
+    pastFightInfoDictionary['FighterTakedownPercentage'] = totalFightStats[6].findAll(text=True)[1].strip()
+    pastFightInfoDictionary['OpponentTakedownPercentage'] = totalFightStats[6].findAll(text=True)[3].strip()
+    pastFightInfoDictionary['FighterSubmissionAttempts'] = totalFightStats[7].findAll(text=True)[1].strip()
+    pastFightInfoDictionary['OpponentSubmissionAttempts'] = totalFightStats[7].findAll(text=True)[3].strip()
+    pastFightInfoDictionary['FighterPass'] = totalFightStats[8].findAll(text=True)[1].strip()
+    pastFightInfoDictionary['OpponentPass'] = totalFightStats[8].findAll(text=True)[3].strip()
+    pastFightInfoDictionary['FighterReversals'] = totalFightStats[9].findAll(text=True)[1].strip()
+    pastFightInfoDictionary['OpponentReversals'] = totalFightStats[9].findAll(text=True)[3].strip()
+    print(pastFightInfoDictionary)
+
+
+
 
 def getAllFighters():
     response = open("test.txt")
