@@ -111,7 +111,15 @@ def scrapeFightPage(url, pastFightInfoDictionary):
     pastFightInfoDictionary['OpponentPass'] = totalFightStats[8].findAll(text=True)[3].strip()
     pastFightInfoDictionary['FighterReversals'] = totalFightStats[9].findAll(text=True)[1].strip()
     pastFightInfoDictionary['OpponentReversals'] = totalFightStats[9].findAll(text=True)[3].strip()
-    print(pastFightInfoDictionary)
+    #print(pastFightInfoDictionary)
+
+    elems = soupRes.select("table")
+
+    totalFightStats = elems[2].select("tr")
+
+    overallStats = totalFightStats[1].select("td")
+
+    overallStatsText = [statElement.findAll(text=True) for statElement in overallStats]
 
 
 
