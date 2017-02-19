@@ -118,25 +118,67 @@ def scrapeFightPage(url, pastFightInfoDictionary, victory):
     pastFightInfoDictionary['OpponentPass'] = totalFightStats[8].findAll(text=True)[opponentIndex].strip()
     pastFightInfoDictionary['FighterReversals'] = totalFightStats[9].findAll(text=True)[fighterIndex].strip()
     pastFightInfoDictionary['OpponentReversals'] = totalFightStats[9].findAll(text=True)[opponentIndex].strip()
-    print(pastFightInfoDictionary)
+    #print(pastFightInfoDictionary)
 
 
-    '''
+
     elems = soupRes.select("table")
 
     totalFightStats = elems[1].select("tr")
 
-    overallStats = totalFightStats[1].select("td")
-
-    #for row in totalFightStats[1:]:
+    #overallStats = totalFightStats[1].select("td")
 
 
-    totalRoundStats = {}
-    overallStatsText = [statElement.findAll(text=True) for statElement in overallStats]
-    totalRoundStats['']
 
-    print(overallStatsText[1])
-    '''
+    totalRoundArray = []
+    for row in totalFightStats[1:]:
+        row = row.select("td")
+        totalRoundStats = {}
+        overallStatsText = [statElement.findAll(text=True) for statElement in row]
+        totalRoundStats['fighterKnockDowns'] = overallStatsText[1][fighterIndex].strip()
+        totalRoundStats['OpponentKnockDowns'] = overallStatsText[1][opponentIndex].strip()
+        totalRoundStats['FighterSignificantStrikes'] = overallStatsText[2][fighterIndex].strip()
+        totalRoundStats['OpponentSignificantStrikes'] = overallStatsText[2][opponentIndex].strip()
+        totalRoundStats['FighterSignificantStrikesPercent'] = overallStatsText[3][fighterIndex].strip()
+        totalRoundStats['OpponentSignificantStrikesPercent'] = overallStatsText[3][opponentIndex].strip()
+        totalRoundStats['FighterTotalStrikes'] = overallStatsText[4][fighterIndex].strip()
+        totalRoundStats['OpponentTotalStrikes'] = overallStatsText[4][opponentIndex].strip()
+        totalRoundStats['FighterTakedowns'] = overallStatsText[5][fighterIndex].strip()
+        totalRoundStats['OpponentTakedowns'] = overallStatsText[5][opponentIndex].strip()
+        totalRoundStats['FighterTakedownPercentage'] = overallStatsText[6][fighterIndex].strip()
+        totalRoundStats['OpponentTakedownPercentage'] = overallStatsText[6][opponentIndex].strip()
+        totalRoundStats['FighterSubmissionAttempts'] = overallStatsText[7][fighterIndex].strip()
+        totalRoundStats['OpponentSubmissionAttempts'] = overallStatsText[7][opponentIndex].strip()
+        totalRoundStats['FighterPass'] = overallStatsText[8][fighterIndex].strip()
+        totalRoundStats['OpponentPass'] = overallStatsText[8][opponentIndex].strip()
+        totalRoundStats['FighterReversals'] = overallStatsText[9][fighterIndex].strip()
+        totalRoundStats['OpponentReversals'] = overallStatsText[9][opponentIndex].strip()
+        totalRoundArray.append(totalRoundStats)
+
+    pastFightInfoDictionary['RoundByRoundTotals'] = totalRoundArray
+    #print(pastFightInfoDictionary)
+    #print(overallStatsText)
+
+
+    sigFightStats = elems[2].select("tr")
+    sigFightStats = sigFightStats[1].select("td")
+    sigStatsText = [statElement.findAll(text=True) for statElement in sigFightStats]
+    #print(sigStatsText)
+
+    pastFightInfoDictionary['fighterHeadSigStrikes'] = sigStatsText[3][fighterIndex].strip()
+    pastFightInfoDictionary['OpponentHeadSigStrikes'] = sigStatsText[3][opponentIndex].strip()
+    pastFightInfoDictionary['FighterBodySigStrikes'] = sigStatsText[4][fighterIndex].strip()
+    pastFightInfoDictionary['OpponentBodySigStrikes'] = sigStatsText[4][opponentIndex].strip()
+    pastFightInfoDictionary['FighterLegSigStrikes'] = sigStatsText[5][fighterIndex].strip()
+    pastFightInfoDictionary['OpponentLegSigStrikes'] = sigStatsText[5][opponentIndex].strip()
+    pastFightInfoDictionary['FighterDistanceSigStrikes'] = sigStatsText[6][fighterIndex].strip()
+    pastFightInfoDictionary['OpponentDistanceSigStrikes'] = sigStatsText[6][opponentIndex].strip()
+    pastFightInfoDictionary['FighterClinchSigStrikes'] = sigStatsText[7][fighterIndex].strip()
+    pastFightInfoDictionary['OpponentClinchSigStrikes'] = sigStatsText[7][opponentIndex].strip()
+    pastFightInfoDictionary['FighterGroundSigStrikes'] = sigStatsText[8][fighterIndex].strip()
+    pastFightInfoDictionary['OpponentGroundSigStrikes'] = sigStatsText[8][opponentIndex].strip()
+
+    #print(pastFightInfoDictionary)
 
 
 def getAllFighters():
