@@ -4,7 +4,7 @@ import json
 from collections import OrderedDict
 
 def main():
-    scrapeFightPage("", {})
+    scrapeFightPage("", {},True)
     # print(elems[0].text)
 
     #saveWebPage("http://www.fightmetric.com/fight-details/84c5035830ebb421", "test4.txt")
@@ -85,43 +85,58 @@ def scrapeFighterInfoPage(individualFighterInformationDict):
 
     print(scrapedPastFightData)
 
-def scrapeFightPage(url, pastFightInfoDictionary):
-    response = requests.get('http://www.fightmetric.com/fight-details/84c5035830ebb421')
+def scrapeFightPage(url, pastFightInfoDictionary, victory):
+    response = requests.get('http://www.fightmetric.com/fight-details/1d7015553debd1c8')
+
+    if victory:
+        fighterIndex = 3
+        opponentIndex = 1
+    else:
+        fighterIndex = 1
+        opponentIndex = 3
 
     soupRes = bs4.BeautifulSoup(response.text,'lxml')
 
     elems = soupRes.select(".b-fight-details__table-body")
     totalFightStats = elems[0].select("td")
 
-    pastFightInfoDictionary['fighterKnockDowns'] = totalFightStats[1].findAll(text=True)[1].strip()
-    pastFightInfoDictionary['OpponentKnockDowns'] = totalFightStats[1].findAll(text=True)[3].strip()
-    pastFightInfoDictionary['FighterSignificantStrikes'] = totalFightStats[2].findAll(text=True)[1].strip()
-    pastFightInfoDictionary['OpponentSignificantStrikes'] = totalFightStats[2].findAll(text=True)[3].strip()
-    pastFightInfoDictionary['FighterSignificantStrikesPercent'] = totalFightStats[3].findAll(text=True)[1].strip()
-    pastFightInfoDictionary['OpponentSignificantStrikesPercent'] = totalFightStats[3].findAll(text=True)[3].strip()
-    pastFightInfoDictionary['FighterTotalStrikes'] = totalFightStats[4].findAll(text=True)[1].strip()
-    pastFightInfoDictionary['OpponentTotalStrikes'] = totalFightStats[4].findAll(text=True)[3].strip()
-    pastFightInfoDictionary['FighterTakedowns'] = totalFightStats[5].findAll(text=True)[1].strip()
-    pastFightInfoDictionary['OpponentTakedowns'] = totalFightStats[5].findAll(text=True)[3].strip()
-    pastFightInfoDictionary['FighterTakedownPercentage'] = totalFightStats[6].findAll(text=True)[1].strip()
-    pastFightInfoDictionary['OpponentTakedownPercentage'] = totalFightStats[6].findAll(text=True)[3].strip()
-    pastFightInfoDictionary['FighterSubmissionAttempts'] = totalFightStats[7].findAll(text=True)[1].strip()
-    pastFightInfoDictionary['OpponentSubmissionAttempts'] = totalFightStats[7].findAll(text=True)[3].strip()
-    pastFightInfoDictionary['FighterPass'] = totalFightStats[8].findAll(text=True)[1].strip()
-    pastFightInfoDictionary['OpponentPass'] = totalFightStats[8].findAll(text=True)[3].strip()
-    pastFightInfoDictionary['FighterReversals'] = totalFightStats[9].findAll(text=True)[1].strip()
-    pastFightInfoDictionary['OpponentReversals'] = totalFightStats[9].findAll(text=True)[3].strip()
-    #print(pastFightInfoDictionary)
+    pastFightInfoDictionary['fighterKnockDowns'] = totalFightStats[1].findAll(text=True)[fighterIndex].strip()
+    pastFightInfoDictionary['OpponentKnockDowns'] = totalFightStats[1].findAll(text=True)[opponentIndex].strip()
+    pastFightInfoDictionary['FighterSignificantStrikes'] = totalFightStats[2].findAll(text=True)[fighterIndex].strip()
+    pastFightInfoDictionary['OpponentSignificantStrikes'] = totalFightStats[2].findAll(text=True)[opponentIndex].strip()
+    pastFightInfoDictionary['FighterSignificantStrikesPercent'] = totalFightStats[3].findAll(text=True)[fighterIndex].strip()
+    pastFightInfoDictionary['OpponentSignificantStrikesPercent'] = totalFightStats[3].findAll(text=True)[opponentIndex].strip()
+    pastFightInfoDictionary['FighterTotalStrikes'] = totalFightStats[4].findAll(text=True)[fighterIndex].strip()
+    pastFightInfoDictionary['OpponentTotalStrikes'] = totalFightStats[4].findAll(text=True)[opponentIndex].strip()
+    pastFightInfoDictionary['FighterTakedowns'] = totalFightStats[5].findAll(text=True)[fighterIndex].strip()
+    pastFightInfoDictionary['OpponentTakedowns'] = totalFightStats[5].findAll(text=True)[opponentIndex].strip()
+    pastFightInfoDictionary['FighterTakedownPercentage'] = totalFightStats[6].findAll(text=True)[fighterIndex].strip()
+    pastFightInfoDictionary['OpponentTakedownPercentage'] = totalFightStats[6].findAll(text=True)[opponentIndex].strip()
+    pastFightInfoDictionary['FighterSubmissionAttempts'] = totalFightStats[7].findAll(text=True)[fighterIndex].strip()
+    pastFightInfoDictionary['OpponentSubmissionAttempts'] = totalFightStats[7].findAll(text=True)[opponentIndex].strip()
+    pastFightInfoDictionary['FighterPass'] = totalFightStats[8].findAll(text=True)[fighterIndex].strip()
+    pastFightInfoDictionary['OpponentPass'] = totalFightStats[8].findAll(text=True)[opponentIndex].strip()
+    pastFightInfoDictionary['FighterReversals'] = totalFightStats[9].findAll(text=True)[fighterIndex].strip()
+    pastFightInfoDictionary['OpponentReversals'] = totalFightStats[9].findAll(text=True)[opponentIndex].strip()
+    print(pastFightInfoDictionary)
 
+
+    '''
     elems = soupRes.select("table")
 
-    totalFightStats = elems[2].select("tr")
+    totalFightStats = elems[1].select("tr")
 
     overallStats = totalFightStats[1].select("td")
 
+    #for row in totalFightStats[1:]:
+
+
+    totalRoundStats = {}
     overallStatsText = [statElement.findAll(text=True) for statElement in overallStats]
+    totalRoundStats['']
 
-
+    print(overallStatsText[1])
+    '''
 
 
 def getAllFighters():
