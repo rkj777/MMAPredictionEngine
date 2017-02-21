@@ -181,6 +181,31 @@ def scrapeFightPage(url, pastFightInfoDictionary, victory):
     #print(pastFightInfoDictionary)
 
 
+    roundByRoundSigStats = elems[3].select("tr")
+    sigRoundArray = []
+    for row in roundByRoundSigStats[1:]:
+        row = row.select("td")
+        sigRoundStats = {}
+        overallStatsText = [statElement.findAll(text=True) for statElement in row]
+        sigRoundStats['fighterSigStrikes'] = overallStatsText[1][fighterIndex].strip()
+        sigRoundStats['OpponentSigStrikes'] = overallStatsText[1][opponentIndex].strip()
+        sigRoundStats['fighterSigStrikesPercent'] = overallStatsText[2][fighterIndex].strip()
+        sigRoundStats['OpponentSigStrikesPercent'] = overallStatsText[2][opponentIndex].strip()
+        sigRoundStats['fighterHeadSigStrikes'] = overallStatsText[3][fighterIndex].strip()
+        sigRoundStats['OpponentHeadSigStrikes'] = overallStatsText[3][opponentIndex].strip()
+        sigRoundStats['FighterBodySigStrikes'] = overallStatsText[4][fighterIndex].strip()
+        sigRoundStats['OpponentBodySigStrikes'] = overallStatsText[4][opponentIndex].strip()
+        sigRoundStats['FighterLegSigStrikes'] = overallStatsText[5][fighterIndex].strip()
+        sigRoundStats['OpponentLegSigStrikes'] = overallStatsText[5][opponentIndex].strip()
+        sigRoundStats['FighterDistanceSigStrikes'] = overallStatsText[6][fighterIndex].strip()
+        sigRoundStats['OpponentDistanceSigStrikes'] = overallStatsText[6][opponentIndex].strip()
+        sigRoundStats['FighterClinchSigStrikes'] = overallStatsText[7][fighterIndex].strip()
+        sigRoundStats['OpponentClinchSigStrikes'] = overallStatsText[7][opponentIndex].strip()
+        sigRoundStats['FighterGroundSigStrikes'] = overallStatsText[8][fighterIndex].strip()
+        sigRoundStats['OpponentGroundSigStrikes'] = overallStatsText[8][opponentIndex].strip()
+        sigRoundArray.append(sigRoundStats)
+
+    pastFightInfoDictionary['SigRoundByRoundTotals'] = sigRoundArray
 def getAllFighters():
     response = open("test.txt")
     soupRes = bs4.BeautifulSoup(response)
